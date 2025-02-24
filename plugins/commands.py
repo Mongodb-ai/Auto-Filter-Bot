@@ -11,7 +11,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from database.ia_filterdb import Media, get_file_details, delete_files
 from database.users_chats_db import db
 from info import TIME_ZONE, IS_PREMIUM, FORCE_SUB_CHANNELS, STICKERS, INDEX_CHANNELS, ADMINS, IS_VERIFY, VERIFY_TUTORIAL, VERIFY_EXPIRE, SHORTLINK_API, SHORTLINK_URL, DELETE_TIME, SUPPORT_LINK, UPDATES_LINK, LOG_CHANNEL, PICS, IS_STREAM, PAYMENT_QR, OWNER_USERNAME, REACTIONS, PM_FILE_DELETE_TIME, OWNER_UPI_ID
-from utils import get_settings, get_size, is_subscribed, is_check_admin, get_shortlink, get_verify_status, update_verify_status, save_group_settings, temp, get_readable_time, get_wish, get_seconds
+from utils import update_premium_status, get_premium_status, get_settings, get_size, is_subscribed, is_check_admin, get_shortlink, get_verify_status, update_verify_status, save_group_settings, temp, get_readable_time, get_wish, get_seconds
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
@@ -42,6 +42,10 @@ async def start(client, message):
     verify_status = await get_verify_status(message.from_user.id)
     if verify_status['is_verified'] and datetime.datetime.now(TIME_ZONE) > verify_status['expire_time']:
         await update_verify_status(message.from_user.id, is_verified=False)
+
+    premium_status = await get_premium_status(message.from_user.id)
+    if verify_status['is_premium'] and datetime.datetime.now(TIME_ZONE) > verify_status['expire_time']:
+        await update_premium_status(message.from_user.id, is_premium=False)
     
     if (len(message.command) != 2) or (len(message.command) == 2 and message.command[1] == 'start'):
         buttons = [[
@@ -79,7 +83,7 @@ async def start(client, message):
         if verify_status['verify_token'] != token:
             return await message.reply("Your verify token is invalid.")
         expiry_time = datetime.datetime.now(TIME_ZONE) + datetime.timedelta(seconds=VERIFY_EXPIRE)
-        await update_verify_status(message.from_user.id, is_verified=True, verified_time=time_now(), expire_time=expiry_time)
+        await update_verify_status(message.from_user.id, is_verified=True, expire_time=expiry_time)
         if verify_status["link"] == "":
             reply_markup = None
         else:
@@ -528,8 +532,7 @@ async def give_premium_cmd_handler(client, message):
         seconds = await get_seconds(time)
         if seconds > 0:
             expiry_time = datetime.datetime.now(TIME_ZONE) + datetime.timedelta(seconds=seconds)
-            user_data = {"id": user_id, "expiry_time": expiry_time} 
-            await db.update_premium_user(user_data)  # Use the update_user method to update or insert user data
+            await update_premium_status(user_id, is_premium=True, expire_time=expiry_time)  # Use the update_user method to update or insert user data
             await message.reply_text("Premium access added to the user.")
             try:
                 await client.send_message(chat_id=user_id, text=f"<b>ᴘʀᴇᴍɪᴜᴍ ᴀᴅᴅᴇᴅ ᴛᴏ ʏᴏᴜʀ ᴀᴄᴄᴏᴜɴᴛ ꜰᴏʀ {time} ᴇɴᴊᴏʏ 😀\n</b>")
@@ -552,10 +555,9 @@ async def remove_premium_cmd_handler(client, message):
         user_id = int(message.command[1])  # Convert the user_id to integer
         if user_id in ADMINS:
             return await message.reply_text('ADMINS not need premium access')
-        user_data = {"id": user_id, "expiry_time": None}  # Using "id" instead of "user_id"
         if not await db.has_premium_access(user_id):   
             return await message.reply_text('This user is not as premium user')
-        await db.update_premium_user(user_data)  # Use the update_user method to update or insert user data
+        await update_premium_status(user_id, is_premium=False, expire_time=0)  # Use the update_user method to update or insert user data
         await message.reply_text("Premium access removed to the user.")
         try:
             await client.send_message(chat_id=user_id, text=f"<b>premium removed by admins \n\n Contact Admin if this is mistake \n\n 👮 Admin : {OWNER_USERNAME} \n</b>", disable_web_page_preview=True)
@@ -588,9 +590,8 @@ async def check_plans_cmd(client, message):
     if user_id in ADMINS:
         return await message.reply_text('This option not have for ADMINS')
     if await db.has_premium_access(user_id):         
-        remaining_time = await db.check_remaining_premium_uasge(user_id)             
-        expiry_time = remaining_time + datetime.datetime.now(TIME_ZONE)
-        await message.reply_text(f"**Your plans details are :\n\nRemaining Time : {get_readable_time(remaining_time.timestamp())}\n\nExpirytime : {expiry_time.strftime('%Y-%m-%d %H:%M')}**")
+        premium_status = await get_premium_status(user_id)        
+        await message.reply_text(f"**Your plan will be Expire : {premium_status['expire_time'].strftime('%Y-%m-%d %H:%M')}**")
     else:
         btn = [[
             InlineKeyboardButton("ɢᴇᴛ ғʀᴇᴇ ᴛʀᴀɪʟ ғᴏʀ 𝟻 ᴍɪɴᴜᴛᴇꜱ ☺️", callback_data="get_trail")
