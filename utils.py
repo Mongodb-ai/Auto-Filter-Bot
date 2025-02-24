@@ -26,6 +26,7 @@ class temp(object):
     USERS_CANCEL = False
     GROUPS_CANCEL = False
     BOT = None
+    PREMIUM = {}
 
 async def is_subscribed(bot, query, channel):
     btn = []
@@ -132,16 +133,30 @@ async def get_verify_status(user_id):
         temp.VERIFICATIONS[user_id] = verify
     return verify
 
-async def update_verify_status(user_id, verify_token="", is_verified=False, verified_time=0, link="", expire_time=0):
+async def update_verify_status(user_id, verify_token="", is_verified=False, link="", expire_time=0):
     current = await get_verify_status(user_id)
     current['verify_token'] = verify_token
     current['is_verified'] = is_verified
-    current['verified_time'] = verified_time
     current['link'] = link
     current['expire_time'] = expire_time
     temp.VERIFICATIONS[user_id] = current
     await db.update_verify_status(user_id, current)
-      
+
+async def get_premium_status(user_id):
+    premium = temp.PREMIUM.get(user_id)
+    if not premium:
+        premium = await db.get_premium_status(user_id)
+        temp.PREMIUM[user_id] = verify
+    return premium
+
+async def update_premium_status(user_id, trial_used=False, is_premium=False, expire_time=0):
+    current = await get_premium_status(user_id)
+    current['trial_used'] = trial_used
+    current['is_premium'] = is_premium
+    current['expire_time'] = expire_time
+    temp.PREMIUM[user_id] = current
+    await db.update_premium_status(user_id, current)
+    
 async def broadcast_messages(user_id, message, pin):
     try:
         m = await message.copy(chat_id=user_id)
