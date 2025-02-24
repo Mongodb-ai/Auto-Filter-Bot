@@ -18,13 +18,13 @@ def is_valid_ip(ip):
     return re.match(ip_pattern, ip) is not None
 
 # Bot information
-API_ID = environ.get('API_ID', '')
+API_ID = environ.get('API_ID', '22421060')
 if len(API_ID) == 0:
     print('Error - API_ID is missing, exiting now')
     exit()
 else:
     API_ID = int(API_ID)
-API_HASH = environ.get('API_HASH', '')
+API_HASH = environ.get('API_HASH', '46a62f7ff38bbe266a4a8dc07770653e')
 if len(API_HASH) == 0:
     print('Error - API_HASH is missing, exiting now')
     exit()
@@ -38,7 +38,7 @@ PORT = int(environ.get('PORT', '80'))
 PICS = (environ.get('PICS', 'https://telegra.ph/file/58fef5cb458d5b29b0186.jpg https://telegra.ph/file/f0aa4f433132769f8970c.jpg https://telegra.ph/file/f515fbc2084592eca60a5.jpg https://telegra.ph/file/20dbdcffaa89bd3d09a74.jpg https://telegra.ph/file/6045ba953af4def846238.jpg')).split()
 
 # Bot Admins
-ADMINS = environ.get('ADMINS', '')
+ADMINS = environ.get('ADMINS', '5369057382')
 if len(ADMINS) == 0:
     print('Error - ADMINS is missing, exiting now')
     exit()
@@ -46,21 +46,21 @@ else:
     ADMINS = [int(admins) for admins in ADMINS.split()]
 
 # Channels
-INDEX_CHANNELS = [int(index_channels) if index_channels.startswith("-") else index_channels for index_channels in environ.get('INDEX_CHANNELS', '').split()]
+INDEX_CHANNELS = [int(index_channels) if index_channels.startswith("-") else index_channels for index_channels in environ.get('INDEX_CHANNELS', '-1002249653012').split()]
 if len(INDEX_CHANNELS) == 0:
     print('Info - INDEX_CHANNELS is empty')
-LOG_CHANNEL = environ.get('LOG_CHANNEL', '')
+LOG_CHANNEL = environ.get('LOG_CHANNEL', '-1002069633417')
 if len(LOG_CHANNEL) == 0:
     print('Error - LOG_CHANNEL is missing, exiting now')
     exit()
 else:
     LOG_CHANNEL = int(LOG_CHANNEL)
-FORCE_SUB_CHANNELS = [int(fsub_channels) if fsub_channels.startswith("-") else fsub_channels for fsub_channels in environ.get('FORCE_SUB_CHANNELS', '').split()]
+FORCE_SUB_CHANNELS = [int(fsub_channels) if fsub_channels.startswith("-") else fsub_channels for fsub_channels in environ.get('FORCE_SUB_CHANNELS', '-1001728907275').split()]
 if len(FORCE_SUB_CHANNELS) == 0:
     print('Info - FORCE_SUB_CHANNELS is empty')
     
 # support group
-SUPPORT_GROUP = environ.get('SUPPORT_GROUP', '')
+SUPPORT_GROUP = environ.get('SUPPORT_GROUP', 'https://t.me/+dYWXUKhKIx5lZmFl')
 if len(SUPPORT_GROUP) == 0:
     print('Error - SUPPORT_GROUP is missing, exiting now')
     exit()
@@ -76,24 +76,24 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Files')
 
 # Links
-SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/HA_Bots_Support')
-OWNER_USERNAME = environ.get("OWNER_USERNAME", "https://t.me/Hansaka_Anuhas")
-UPDATES_LINK = environ.get('UPDATES_LINK', 'https://t.me/HA_Bots')
-FILMS_LINK = environ.get('FILMS_LINK', 'https://t.me/HA_Films_World')
-TUTORIAL = environ.get("TUTORIAL", "https://t.me/HA_Bots")
-VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/HA_Bots")
+SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/all_movies_netflixx')
+OWNER_USERNAME = environ.get("OWNER_USERNAME", "https://t.me/PrinceNy4")
+UPDATES_LINK = environ.get('UPDATES_LINK', 'https://t.me/backupchannel019')
+FILMS_LINK = environ.get('FILMS_LINK', 'https://t.me/+OOG45cpUzh81ZTM9')
+TUTORIAL = environ.get("TUTORIAL", "https://t.me/moviee_group_0/3500316")
+VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/moviee_group_0/3500316")
 
 # Bot settings
 TIME_ZONE = pytz.timezone(environ.get("TIME_ZONE", 'Asia/Colombo'))
-DELETE_TIME = int(environ.get('DELETE_TIME', 3600)) # Add time in seconds
+DELETE_TIME = int(environ.get('DELETE_TIME', 240)) # Add time in seconds
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
 MAX_BTN = int(environ.get('MAX_BTN', 10))
 LANGUAGES = [language.lower() for language in environ.get('LANGUAGES', 'hindi english telugu tamil kannada malayalam marathi punjabi').split()]
 QUALITY = [quality.lower() for quality in environ.get('QUALITY', '360p 480p 720p 1080p 2160p').split()]
 IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", script.IMDB_TEMPLATE)
 FILE_CAPTION = environ.get("FILE_CAPTION", script.FILE_CAPTION)
-SHORTLINK_URL = environ.get("SHORTLINK_URL", "mdiskshortner.link")
-SHORTLINK_API = environ.get("SHORTLINK_API", "36f1ae74ba1aa01e5bd73bdd0bc22aa915443501")
+SHORTLINK_URL = environ.get("SHORTLINK_URL", "modijiurl.com")
+SHORTLINK_API = environ.get("SHORTLINK_API", "266f12e727250353b7108b3ffc9d40af4645a646")
 VERIFY_EXPIRE = int(environ.get('VERIFY_EXPIRE', 86400)) # Add time in seconds
 WELCOME_TEXT = environ.get("WELCOME_TEXT", script.WELCOME_TEXT)
 INDEX_EXTENSIONS = [extensions.lower() for extensions in environ.get('INDEX_EXTENSIONS', 'mp4 mkv').split()]
@@ -107,16 +107,16 @@ PROTECT_CONTENT = is_enabled('PROTECT_CONTENT', False)
 LONG_IMDB_DESCRIPTION = is_enabled("LONG_IMDB_DESCRIPTION", False)
 LINK_MODE = is_enabled("LINK_MODE", True)
 AUTO_FILTER = is_enabled('AUTO_FILTER', True)
-IMDB = is_enabled('IMDB', True)
+IMDB = is_enabled('IMDB', false)
 SPELL_CHECK = is_enabled("SPELL_CHECK", True)
 SHORTLINK = is_enabled('SHORTLINK', False)
 
 #premium info
 IS_PREMIUM = is_enabled('IS_PREMIUM', True)
-PAYMENT_QR = environ.get('PAYMENT_QR', '')
+PAYMENT_QR = environ.get('PAYMENT_QR', 'https://envs.sh/QFR.jpg')
 if len(PAYMENT_QR) == 0:
     print('Info - PAYMENT_QR is empty')
-OWNER_UPI_ID = environ.get('OWNER_UPI_ID', '')  #if you not have UPI, then use another method
+OWNER_UPI_ID = environ.get('OWNER_UPI_ID', '8569996352@pthdfc')  #if you not have UPI, then use another method
 if len(OWNER_UPI_ID) == 0:
     print('Info - OWNER_UPI_ID is empty')
 if len(PAYMENT_QR) == 0 or len(OWNER_UPI_ID) == 0:
